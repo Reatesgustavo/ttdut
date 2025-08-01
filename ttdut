@@ -1,0 +1,55 @@
+import streamlit as st
+import pandas as pd
+
+# Dados simulados
+dados = [
+    {
+        "Ordem de Produção": "10045262",
+        "Código do Produto": "4570020",
+        "Descrição do Código": "CÂMERA IP DE VÍDEO BULLET VIP 3250 AL IA",
+        "Quantidade": 500,
+        "Status": "Concluído",
+        "Responsável Mecânica": "Ian",
+        "Recurso": "MFIP1-01"
+    },
+    {
+        "Ordem de Produção": "10045262",
+        "Código do Produto": "4570020",
+        "Descrição do Código": "CÂMERA IP DE VÍDEO BULLET VIP 3250 AL IA",
+        "Quantidade": 500,
+        "Status": "Em separação",
+        "Responsável Mecânica": "Ian",
+        "Recurso": "MFIP1-01"
+    },
+    # Adicione mais ordens aqui se quiser
+]
+
+df = pd.DataFrame(dados)
+
+# Layout da página
+st.set_page_config(layout="wide")
+st.title("📦 Painel de Ordens de Produção")
+
+# Mostrar cards em linhas de até 3 colunas
+num_colunas = 3
+linhas = [df[i:i+num_colunas] for i in range(0, len(df), num_colunas)]
+
+for linha in linhas:
+    cols = st.columns(len(linha))
+    for i, (_, row) in enumerate(linha.iterrows()):
+        cor_card = "#4CAF50" if row["Status"] == "Concluído" else "#FF9800"
+
+        with cols[i]:
+            st.markdown(
+                f"""
+                <div style="background-color: {cor_card}; padding: 20px; border-radius: 20px; color: white; font-family: sans-serif; margin-bottom: 10px;">
+                    <h3 style="margin: 0;">{row['Ordem de Produção']}</h3>
+                    <p style="margin: 5px 0;"><strong>{row['Código do Produto']}</strong> – {row['Descrição do Código']}</p>
+                    <p style="margin: 5px 0;">Quantidade: {row['Quantidade']}</p>
+                    <p style="margin: 5px 0;">Status: {row['Status']}</p>
+                    <p style="margin: 5px 0;">Responsável mecânica: {row['Responsável Mecânica']}</p>
+                    <p style="margin: 5px 0;">Centro de trabalho: {row['Recurso']}</p>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
